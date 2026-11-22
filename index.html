@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aide-mémoire HTML & CSS</title>
+<style>
+:root{--bg:#fbf7f2;--card:#fff;--tx:#2a2420;--mu:#7a6e66;--ac:#e8590c;--bd:#eadfd5;--code:#f4ece4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1816;--card:#262120;--tx:#f1e9e2;--mu:#a89a90;--ac:#ff8a4c;--bd:#3a322e;--code:#322a26}}
+:root[data-theme="dark"]{--bg:#1c1816;--card:#262120;--tx:#f1e9e2;--mu:#a89a90;--ac:#ff8a4c;--bd:#3a322e;--code:#322a26}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+header{padding:24px 16px 8px;max-width:1000px;margin:auto}
+h1{margin:0 0 4px;font-size:1.6rem}
+header p{margin:0;color:var(--mu)}
+.bar{max-width:1000px;margin:auto;padding:8px 16px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+input{width:100%;padding:12px 14px;border:2px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font-size:1rem}
+input:focus{outline:none;border-color:var(--ac)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px}
+button{font:inherit;cursor:pointer}
+.chip{white-space:nowrap;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;border-radius:99px}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.mode{margin-left:auto;border:2px dashed var(--ac);background:none;color:var(--ac);padding:6px 12px;border-radius:99px;white-space:nowrap}
+.mode.on{background:var(--ac);color:#fff}
+main{max-width:1000px;margin:auto;padding:8px 16px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--ac);font-size:1.05rem}
+.cat{font-size:.72rem;color:var(--mu);border:1px solid var(--bd);border-radius:99px;padding:2px 8px}
+pre{margin:0;background:var(--code);padding:10px;border-radius:8px;font-size:.82rem;overflow-x:auto;white-space:pre-wrap}
+.prev{border:1px dashed var(--bd);border-radius:8px;padding:8px;font-size:.9rem;overflow:auto}
+.lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mu)}
+.card.rev .body{display:none}
+.card.rev.open .body{display:flex}
+.card.rev{cursor:pointer}
+.body{flex-direction:column;gap:8px}
+.hint{display:none;color:var(--mu);font-size:.85rem}
+.card.rev:not(.open) .hint{display:block}
+.empty{grid-column:1/-1;text-align:center;color:var(--mu);padding:30px}
+</style>
+</head>
+<body>
+<header><h1>🧰 Aide-mémoire HTML &amp; CSS</h1><p>Cherche une balise, filtre par type, teste l’exemple. Active le mode révision pour t’entraîner.</p></header>
+<div class="bar">
+<input id="q" type="search" placeholder="Cherche : image, lien, gras, couleur, formulaire…" autocomplete="off">
+<div class="chips" id="chips"></div>
+</div>
+<main id="list"></main>
+<script>
+var D=[
+["Structure","<html>","Encadre tout le document. Mets lang=\"fr\".",`<html lang="fr">\n  …\n</html>`,0],
+["Structure","<head>","Infos techniques invisibles (titre, CSS, encodage).",`<head>\n  <meta charset="utf-8">\n  <title>Ma page</title>\n</head>`,0],
+["Structure","<title>","Titre affiché dans l’onglet du navigateur.",`<title>Mon super site</title>`,0],
+["Structure","<meta>","Métadonnées : encodage, description, viewport.",`<meta name="viewport" content="width=device-width, initial-scale=1">`,0],
+["Structure","<link>","Relie ta feuille de style CSS externe.",`<link rel="stylesheet" href="style.css">`,0],
+["Structure","<style>","CSS écrit directement dans la page.",`<style>\n  p { color: red; }\n</style>`,0],
+["Structure","<script>","Ajoute du JavaScript.",`<script src="app.js"><\/script>`,0],
+["Structure","<body>","Tout ce qui s’affiche à l’écran.",`<body>\n  <h1>Bonjour</h1>\n</body>`,0],
+["Texte","<p>","Un paragraphe.",`<p>Mon premier paragraphe.</p>`],
+["Texte","<br>","Saut de ligne simple.",`Ligne 1<br>Ligne 2`],
+["Texte","<hr>","Ligne de séparation horizontale.",`<hr>`],
+["Texte","<strong>","Texte important (gras).",`<strong>Attention !</strong>`],
+["Texte","<em>","Texte en emphase (italique).",`<em>Très</em> utile`],
+["Texte","<mark>","Surligne du texte.",`<mark>À retenir</mark>`],
+["Texte","<sub> / <sup>","Indice / exposant.",`H<sub>2</sub>O et x<sup>2</sup>`],
+["Texte","<blockquote>","Longue citation.",`<blockquote>Une longue citation…</blockquote>`],
+["Texte","<q>","Citation courte (guillemets auto).",`<q>Bonjour</q>`],
+["Texte","<pre>","Texte préformaté (garde espaces et sauts de ligne).",`<pre>ligne 1\n    ligne 2</pre>`],
+["Texte","<kbd>","Touche clavier.",`Appuie sur <kbd>Ctrl</kbd>+<kbd>C</kbd>`],
+["Titres","<h1> … <h6>","Titres du plus important (h1) au moins important (h6). Un seul h1 par page.",`<h1>Titre principal</h1>\n<h2>Sous-titre</h2>`],
+["Liens","<a href>","Lien vers une page web.",`<a href="https://example.com">Mon lien</a>`],
+["Liens","<a mailto>","Lien qui ouvre l’e-mail.",`<a href="mailto:moi@mail.fr">Écris-moi</a>`],
+["Liens","<a #ancre>","Lien vers un endroit de la même page.",`<a href="#bas">Aller en bas</a>\n<h2 id="bas">Bas de page</h2>`],
+["Liens","target=\"_blank\"","Ouvre le lien dans un nouvel onglet.",`<a href="https://example.com" target="_blank">Nouvel onglet</a>`],
+["Images & médias","<img>","Image. src = fichier, alt = texte alternatif.",`<img src="photo.jpg" alt="Un chat" width="150">`],
+["Images & médias","<figure> + <figcaption>","Image avec légende.",`<figure>\n  <img src="photo.jpg" alt="Chat">\n  <figcaption>Mon chat</figcaption>\n</figure>`],
+["Images & médias","<audio>","Lecteur audio.",`<audio controls src="son.mp3"></audio>`],
+["Images & médias","<video>","Lecteur vidéo.",`<video controls width="250" src="film.mp4"></video>`],
+["Listes","<ul> + <li>","Liste à puces.",`<ul>\n  <li>Pommes</li>\n  <li>Poires</li>\n</ul>`],
+["Listes","<ol> + <li>","Liste numérotée.",`<ol>\n  <li>Étape 1</li>\n  <li>Étape 2</li>\n</ol>`],
+["Listes","<dl> <dt> <dd>","Liste de définitions : terme + description.",`<dl>\n  <dt>HTML</dt>\n  <dd>Langage de balisage</dd>\n</dl>`],
+["Tableaux","<table> <tr> <td>","Tableau : table = tableau, tr = ligne, td = cellule.",`<table border="1">\n  <tr><td>A</td><td>B</td></tr>\n</table>`],
+["Tableaux","<th>, <thead>, <tbody>","En-têtes de colonnes et groupes de lignes.",`<table border="1">\n  <thead><tr><th>Nom</th><th>Âge</th></tr></thead>\n  <tbody><tr><td>Léa</td><td>12</td></tr></tbody>\n</table>`],
+["Tableaux","colspan / rowspan","Fusionne des cellules.",`<table border="1">\n  <tr><td colspan="2">Fusionnée</td></tr>\n  <tr><td>A</td><td>B</td></tr>\n</table>`],
+["Formulaires","<form>","Encadre le formulaire (action = où envoyer, method = comment).",`<form action="/envoi" method="post">\n  …\n</form>`],
+["Formulaires","<label>","Texte lié à un champ (for = id du champ).",`<label for="n">Nom :</label>\n<input id="n" type="text">`],
+["Formulaires","<input type=\"text\">","Champ texte simple.",`<input type="text" placeholder="Ton nom">`],
+["Formulaires","<input type=\"email\">","Champ e-mail (vérifie le format).",`<input type="email" placeholder="toi@mail.fr">`],
+["Formulaires","<input type=\"password\">","Mot de passe masqué.",`<input type="password">`],
+["Formulaires","<input type=\"checkbox\">","Case à cocher.",`<input type="checkbox" id="c"> <label for="c">J’accepte</label>`],
+["Formulaires","<input type=\"radio\">","Bouton radio (un seul choix, même name).",`<input type="radio" name="s"> Oui\n<input type="radio" name="s"> Non`],
+["Formulaires","<textarea>","Zone de texte multiligne.",`<textarea rows="3" cols="25">Message…</textarea>`],
+["Formulaires","<select> + <option>","Liste déroulante.",`<select>\n  <option>Rouge</option>\n  <option>Bleu</option>\n</select>`],
+["Formulaires","<button> / submit","Bouton d’envoi ou d’action.",`<button type="submit">Envoyer</button>`],
+["Formulaires","<fieldset> + <legend>","Groupe de champs avec titre.",`<fieldset>\n  <legend>Contact</legend>\n  <input type="text">\n</fieldset>`],
+["Sections","<header>","En-tête de page ou de section (logo, titre).",`<header><h1>Mon site</h1></header>`],
+["Sections","<nav>","Menu de navigation.",`<nav>\n  <a href="#">Accueil</a> |\n  <a href="#">Contact</a>\n</nav>`],
+["Sections","<main>","Contenu principal de la page.",`<main>\n  <p>Contenu…</p>\n</main>`],
+["Sections","<section>","Section thématique, avec un titre.",`<section>\n  <h2>À propos</h2>\n</section>`],
+["Sections","<article>","Bloc autonome (article, fiche produit).",`<article>\n  <h2>Mon article</h2>\n</article>`],
+["Sections","<aside>","Contenu secondaire (barre latérale).",`<aside>Info complémentaire</aside>`],
+["Sections","<footer>","Pied de page (mentions, contact).",`<footer>© 2026 Moi</footer>`],
+["Sections","<div> / <span>","Boîtes génériques : div = bloc, span = dans le texte. Utiles avec class et id.",`<div class="boite">Bloc</div>\nTexte <span class="rouge">coloré</span>`],
+["Sections","class / id / style","class : groupe d’éléments (.nom en CSS). id : unique (#nom). style : CSS direct.",`<p class="note" id="intro" style="color:teal">Texte</p>`],
+["CSS – Police","color","Couleur du texte.",`<p style="color:crimson">Texte rouge</p>`],
+["CSS – Police","font-family","Choix de la police.",`<p style="font-family:Georgia,serif">Police Georgia</p>`],
+["CSS – Police","font-size","Taille du texte (px, em, rem).",`<p style="font-size:24px">Grand texte</p>`],
+["CSS – Police","font-weight / font-style","Gras / italique.",`<p style="font-weight:bold;font-style:italic">Gras italique</p>`],
+["CSS – Police","text-align","Alignement : left, center, right, justify.",`<p style="text-align:center">Centré</p>`],
+["CSS – Police","text-decoration","Souligné, barré, aucun (liens).",`<p style="text-decoration:underline">Souligné</p>`],
+["CSS – Police","line-height","Espace entre les lignes.",`<p style="line-height:2">Ligne 1<br>Ligne 2</p>`],
+["CSS – Couleurs","background-color","Couleur de fond.",`<p style="background-color:gold;padding:6px">Fond doré</p>`],
+["CSS – Couleurs","background-image","Image de fond.",`<div style="background-image:linear-gradient(90deg,#f90,#e44);height:50px"></div>`],
+["CSS – Boîte","width / height","Largeur / hauteur (pas pour span).",`<div style="width:50%;height:40px;background:#9cf"></div>`],
+["CSS – Boîte","margin","Espace extérieur.",`<div style="margin:20px;background:#cfc">Marge</div>`],
+["CSS – Boîte","padding","Espace intérieur.",`<div style="padding:20px;background:#fcc">Padding</div>`],
+["CSS – Boîte","border","Bordure : épaisseur, style, couleur.",`<div style="border:3px dashed teal;padding:6px">Bordure</div>`],
+["CSS – Boîte","border-radius","Coins arrondis.",`<div style="border-radius:20px;background:#fc9;padding:10px">Arrondi</div>`],
+["CSS – Boîte","box-shadow","Ombre portée.",`<div style="box-shadow:4px 4px 10px #888;padding:10px;width:60%">Ombre</div>`],
+["CSS – Mise en page","display:flex","Aligne des éléments en ligne, facilement.",`<div style="display:flex;gap:8px;justify-content:space-between"><b>A</b><b>B</b><b>C</b></div>`],
+["CSS – Mise en page","display:grid","Grille en colonnes.",`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><b>1</b><b>2</b><b>3</b><b>4</b></div>`],
+["CSS – Mise en page","position","relative, absolute, fixed, sticky.",`<div style="position:relative;height:50px;background:#eee"><span style="position:absolute;right:4px;top:4px">↗</span></div>`],
+["CSS – Mise en page","margin: auto","Centre un bloc qui a une largeur.",`<div style="width:100px;margin:auto;background:#9cf;text-align:center">Centré</div>`],
+["CSS – Effets","hover","Style au survol de la souris (dans un fichier CSS : a:hover { … }).",`<style>.h:hover{background:orange}</style><button class="h">Survole-moi</button>`],
+["CSS – Effets","opacity","Transparence de 0 à 1.",`<div style="opacity:.4;background:#e44;padding:8px">Transparent</div>`]
+];
+var cats=["Tout"].concat(D.map(function(d){return d[0]}).filter(function(c,i,a){return a.indexOf(c)===i}));
+var cur="Tout",rev=false,q=document.getElementById("q"),L=document.getElementById("list"),C=document.getElementById("chips");
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function chips(){C.innerHTML="";cats.forEach(function(c){var b=document.createElement("button");b.className="chip"+(c===cur?" on":"");b.textContent=c;b.onclick=function(){cur=c;chips();draw()};C.appendChild(b)});
+var m=document.createElement("button");m.className="mode"+(rev?" on":"");m.textContent="🎴 Mode révision";m.onclick=function(){rev=!rev;chips();draw()};C.appendChild(m)}
+function draw(){var t=q.value.toLowerCase().trim(),n=0;L.innerHTML="";
+D.forEach(function(d){if(cur!=="Tout"&&d[0]!==cur)return;if(t&&(d.slice(0,4).join(" ").toLowerCase().indexOf(t)<0))return;n++;
+var c=document.createElement("div");c.className="card"+(rev?" rev":"");
+c.innerHTML='<div class="top"><span class="tag">'+esc(d[1])+'</span><span class="cat">'+d[0]+'</span></div><div class="hint">👆 Clique pour voir la réponse</div><div class="body"><div>'+esc(d[2])+'</div><div class="lbl">Exemple</div><pre>'+esc(d[3])+'</pre>'+(d[4]===0?'':'<div class="lbl">Résultat</div><div class="prev">'+d[3]+'</div>')+'</div>';
+if(rev)c.onclick=function(){c.classList.toggle("open")};L.appendChild(c)});
+if(!n)L.innerHTML='<div class="empty">Aucun résultat 🤔 Essaie un autre mot.</div>'}
+q.oninput=draw;chips();draw();
+</script>
+</body>
+</html>
